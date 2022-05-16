@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: |
+  This template launches an ec2 instance which enables SSH & HTTP.
+
+Parameters:
+  pMyKey:
+    Description: Key pair for EC2 instance
+    Type: String
+  
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0022f774911c1d690
+      InstanceType: t2.micro
+      SubnetId: subnet-00b026a07bfa9d394
+      SecurityGroupIds: 
+        - !Ref WebServerSG
+      KeyName: !Ref pMyKey
+      Tags:
+        - Key: Name
+          Value: FrenchieWebServer
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #! /bin/bash
+
+            yum update -y
+            yum install wget
+            yum install -y httpd
+            chmod -R 777 /var/www/html
+            cd /var/www/html
+            wget https://raw.githubusercontent.com/i-Varies/Frenchie-Cuties/main/index.html
+            systemctl start httpd
+            systemctl enable httpd   
+
+  WebServerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access on ports 80 and 22
+      GroupName: WebServer SG
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: WebServer SG
+      VpcId: vpc-024963d241215ccd3         
+
