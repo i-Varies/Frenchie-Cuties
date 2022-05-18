@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: |
+  This template launches an ec2 instance which enables SSH & HTTP.
+
+Parameters:
+  pMyKey:
+    Description: Key pair for EC2 instance
+    Type: String
+
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: 
+      InstanceType: 
+      SubnetId: 
+      SecurityGroupIds: 
+        - !Ref WebServerSG
+      KeyName: !Ref pMyKey
+      Tags:
+        - Key: 
+          Value: 
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash
+
+
+  WebServerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access on ports 80 and 22
+      GroupName: 
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: 
+          Value: 
+      VpcId: 
