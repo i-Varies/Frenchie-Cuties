@@ -31,7 +31,7 @@ Resources:
             yum install -y httpd
             chmod -R 777 /var/www/html
             cd /var/www/html
-            wget https://raw.githubusercontent.com/i-Varies/Frenchie-Cuties/main/index.html
+            wget https://raw.githubusercontent.com/momoch4n/Frenchie-Cuties/main/index.html
             systemctl start httpd
             systemctl enable httpd   
 
